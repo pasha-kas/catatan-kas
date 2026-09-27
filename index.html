@@ -124,7 +124,7 @@ button{cursor:pointer}
     <select id="catFilter" class="select" onchange="renderTable()"><option value="">Semua Kategori</option></select>
     <select id="typeFilter" class="select" onchange="renderTable()"><option value="">Semua Jenis</option><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option></select>
   </div>
-  <div class="card table-card"><div class="table-wrap"><table class="table"><thead><tr><th>Tanggal</th><th>Jenis</th><th>Kategori</th><th>Keterangan</th><th>Nominal</th><th id="actionHead">Aksi</th></tr></thead><tbody id="tbody"></tbody></table></div><div id="pagination" class="pagination"></div></div>
+  <div class="card table-card"><div class="table-wrap"><table class="table"><thead><tr><th>Tanggal</th><th>Nama</th><th>Jenis</th><th>Kategori</th><th>Keterangan</th><th>Nominal</th><th id="actionHead">Aksi</th></tr></thead><tbody id="tbody"></tbody></table></div><div id="pagination" class="pagination"></div></div>
 </section>
 
 <section id="reports" class="page">
@@ -231,7 +231,7 @@ function filteredTransactions(){
 function renderTable(){
   const rows=filteredTransactions(),pages=Math.max(1,Math.ceil(rows.length/PAGE_SIZE));currentPage=Math.min(currentPage,pages);
   const start=(currentPage-1)*PAGE_SIZE,view=rows.slice(start,start+PAGE_SIZE);
-  document.getElementById("tbody").innerHTML=view.length?view.map(x=>`<tr><td>${esc(x.tanggal)}</td><td><span class="badge ${x.jenis==="masuk"?"in":"out"}">${x.jenis==="masuk"?"Pemasukan":"Pengeluaran"}</span></td><td>${esc(x.kategori||"Lainnya")}</td><td>${esc(x.keterangan||x.nama||"-")}</td><td class="${x.jenis==="masuk"?"money-in":"money-out"}">${rupiah(x.nominal)}</td><td>${isAdmin?`<button class="btn small" onclick="openTransaction(${x.id})">Edit</button> <button class="btn small danger" onclick="deleteTransaction(${x.id})">Hapus</button>`:"-"}</td></tr>`).join(""):`<tr><td colspan="6" class="empty">Belum ada transaksi yang sesuai.</td></tr>`;
+  document.getElementById("tbody").innerHTML=view.length?view.map(x=>`<tr><td>${esc(x.tanggal)}</td><td><strong>${esc(x.nama||"-")}</strong></td><td><span class="badge ${x.jenis==="masuk"?"in":"out"}">${x.jenis==="masuk"?"Pemasukan":"Pengeluaran"}</span></td><td>${esc(x.kategori||"Lainnya")}</td><td>${esc(x.keterangan||"-")}</td><td class="${x.jenis==="masuk"?"money-in":"money-out"}">${rupiah(x.nominal)}</td><td>${isAdmin?`<button class="btn small" onclick="openTransaction(${x.id})">Edit</button> <button class="btn small danger" onclick="deleteTransaction(${x.id})">Hapus</button>`:"-"}</td></tr>`).join(""):`<tr><td colspan="7" class="empty">Belum ada transaksi yang sesuai.</td></tr>`;
   let pg="";for(let i=1;i<=pages;i++)pg+=`<button class="${i===currentPage?"active":""}" onclick="currentPage=${i};renderTable()">${i}</button>`;document.getElementById("pagination").innerHTML=pg;
 }
 function renderCharts(){
