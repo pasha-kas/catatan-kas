@@ -1,201 +1,299 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catatan Kas</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <style>
-    :root{--navy:#0f1f3d;--blue:#2563eb;--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#718096;--line:#e7edf5;--green:#16a34a;--red:#dc2626;--shadow:0 12px 30px rgba(15,31,61,.07)}
-    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    .app{min-height:100vh;display:flex}.sidebar{width:245px;background:var(--navy);color:#fff;padding:25px 18px;position:fixed;inset:0 auto 0 0;z-index:5}
-    .brand{font-size:22px;font-weight:800;padding:10px 12px 28px}.brand span{color:#8fb7ff}
-    .nav{display:grid;gap:7px}.nav button{border:0;background:transparent;color:#cbd5e1;text-align:left;padding:12px 14px;border-radius:12px;font-size:14px;cursor:pointer}.nav button.active,.nav button:hover{background:rgba(255,255,255,.1);color:#fff}
-    .side-bottom{position:absolute;left:18px;right:18px;bottom:20px;color:#94a3b8;font-size:12px;line-height:1.5}
-    .main{margin-left:245px;width:calc(100% - 245px);padding:30px;max-width:1500px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}
-    h1{margin:0;font-size:28px}.sub{color:var(--muted);margin-top:5px}.actions{display:flex;gap:9px;flex-wrap:wrap}
-    button.primary,.primary{background:var(--blue);color:white;border:0}.btn{border:1px solid var(--line);background:#fff;color:var(--text);padding:10px 14px;border-radius:10px;font-weight:650;cursor:pointer}.btn:hover{filter:brightness(.98)}
-    .btn.primary{background:var(--blue);border-color:var(--blue)}.btn.danger{color:var(--red)}.btn.small{padding:7px 9px;font-size:12px}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
-    .stat .label{color:var(--muted);font-size:13px}.stat .value{font-size:25px;font-weight:800;margin-top:8px}.green{color:var(--green)}.red{color:var(--red)}
-    .grid{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;margin-bottom:18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
-    .card h2{font-size:16px;margin:0 0 16px}.chartbox{height:280px}.chartbox canvas{width:100%!important;height:100%!important}
-    .toolbar{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap}.search{flex:1;min-width:200px;border:1px solid var(--line);border-radius:10px;padding:11px 13px;outline:none}.select{border:1px solid var(--line);border-radius:10px;padding:11px;background:#fff}
-    .table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{color:var(--muted);font-weight:700}.badge{padding:5px 8px;border-radius:99px;font-size:11px;font-weight:750}.badge.in{background:#eaf8ef;color:#16803c}.badge.out{background:#fff0f0;color:#c51f1f}
-    .empty{text-align:center;color:var(--muted);padding:35px}.notice{background:#eef5ff;border:1px solid #d8e8ff;color:#28518d;padding:12px 14px;border-radius:12px;font-size:13px;margin-bottom:18px}
-    .hidden{display:none!important}.modal{position:fixed;inset:0;background:rgba(5,15,35,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}.modal-box{background:#fff;width:min(440px,100%);border-radius:18px;padding:25px;box-shadow:0 25px 80px rgba(0,0,0,.2)}.modal-box h2{margin-top:0}.field{display:grid;gap:6px;margin:13px 0}.field label{font-size:13px;font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px;font:inherit}.field textarea{min-height:80px;resize:vertical}.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}.error{color:var(--red);font-size:13px;margin-top:8px}
-    .login-state{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1}.dot.on{background:#22c55e}
-    @media(max-width:900px){.sidebar{width:72px;padding:20px 10px}.brand{font-size:0;text-align:center}.brand:first-letter{font-size:25px}.nav button{font-size:0;text-align:center}.nav button::first-letter{font-size:20px}.side-bottom{display:none}.main{margin-left:72px;width:calc(100% - 72px);padding:20px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
-    @media(max-width:600px){.top{align-items:flex-start;flex-direction:column}h1{font-size:23px}.stats{grid-template-columns:1fr}.main{padding:14px}.sidebar{display:none}.main{margin-left:0;width:100%}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catatan Kas — Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{
+  --navy:#10243d;--navy2:#0b1a2b;--green:#10b981;--green2:#059669;
+  --blue:#3b82f6;--red:#ef5b68;--orange:#f59e0b;--purple:#8b5cf6;
+  --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#718096;--line:#e5eaf1;
+  --shadow:0 10px 28px rgba(15,35,60,.07);--radius:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;display:flex}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:235px;background:linear-gradient(180deg,var(--navy),var(--navy2));color:#fff;padding:22px 14px;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 12px 24px;font-weight:800;font-size:20px}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#19c58b,#087f64);display:grid;place-items:center;box-shadow:0 8px 18px rgba(16,185,129,.25)}
+.brand-mark::before{content:"₿";font-weight:900;color:white}
+.nav{display:grid;gap:6px}
+.nav button{border:0;background:transparent;color:#c8d3df;padding:11px 13px;border-radius:11px;text-align:left;display:flex;align-items:center;gap:11px;font-size:13px;font-weight:650}
+.nav button:hover,.nav button.active{background:linear-gradient(90deg,#11a976,#07966b);color:white}
+.nav-icon{width:20px;text-align:center}
+.side-user{position:absolute;left:16px;right:16px;bottom:18px;border-top:1px solid rgba(255,255,255,.1);padding:15px 7px 0;display:flex;gap:9px;align-items:center}
+.avatar{width:31px;height:31px;border-radius:50%;background:#f4f7fb;color:#0e6e58;display:grid;place-items:center;font-weight:800;font-size:12px}
+.side-user strong{display:block;font-size:12px}.side-user span{font-size:10px;color:#aebdcb}
+.main{margin-left:235px;width:calc(100% - 235px);padding:26px;max-width:1600px}
+.page{display:none}.page.active{display:block}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:22px}
+.greeting h1{margin:0;font-size:25px;letter-spacing:-.3px}.greeting p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.status{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:7px;margin-right:5px}
+.dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1}.dot.on{background:#22c55e}
+.btn{border:1px solid var(--line);background:#fff;color:var(--text);padding:9px 13px;border-radius:10px;font-weight:700;font-size:12px}
+.btn:hover{filter:brightness(.98);transform:translateY(-1px)}
+.btn.primary{background:var(--green);border-color:var(--green);color:white}.btn.primary:hover{background:var(--green2)}
+.btn.danger{color:#d92d3a}.btn.ghost{background:transparent}.btn.small{padding:6px 8px;font-size:11px}
+.hidden{display:none!important}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.stat-top{display:flex;justify-content:space-between;align-items:center}.stat-label{font-size:11px;color:var(--muted);font-weight:700}.stat-icon{width:31px;height:31px;border-radius:9px;display:grid;place-items:center;font-size:14px}
+.i-green{background:#e5f8f0;color:#07966b}.i-blue{background:#eaf2ff;color:#3978df}.i-red{background:#fff0f1;color:#e44e5b}.i-purple{background:#f0ebff;color:#7650df}
+.stat-value{font-size:21px;font-weight:850;margin-top:9px}.stat-note{font-size:10px;color:var(--muted);margin-top:4px}
+.content-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:15px;margin-bottom:15px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:17px}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.card-head h2{font-size:14px;margin:0}.card-head span{font-size:10px;color:var(--muted)}
+.chartbox{height:270px}.chartbox canvas{width:100%!important;height:100%!important}
+.bottom-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:15px}
+.mini-table{width:100%;border-collapse:collapse;font-size:11px}.mini-table th,.mini-table td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:left}.mini-table th{color:var(--muted);font-weight:700}.money-in{color:#07966b;font-weight:800}.money-out{color:#e34e5a;font-weight:800}
+.page-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:17px}.page-title h1{font-size:22px;margin:0}.page-title p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:13px}
+.search{flex:1;min-width:190px;border:1px solid var(--line);border-radius:9px;padding:9px 11px;outline:none;font-size:12px}.select,.date-input{border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#fff;font-size:12px;color:var(--text)}
+.table-card{padding:0;overflow:hidden}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:11px}.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{background:#fbfcfe;color:var(--muted);font-size:10px}.badge{padding:5px 8px;border-radius:99px;font-size:9px;font-weight:800}.badge.in{background:#e8f8f0;color:#078b63}.badge.out{background:#fff0f1;color:#d73e4c}.empty{text-align:center;color:var(--muted);padding:35px}
+.pagination{display:flex;justify-content:flex-end;gap:5px;padding:12px}.pagination button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 9px;font-size:11px}.pagination button.active{background:var(--green);border-color:var(--green);color:white}
+.report-tabs{display:flex;gap:6px;background:#fff;border:1px solid var(--line);padding:5px;border-radius:11px;width:max-content;box-shadow:var(--shadow);margin-bottom:15px}.report-tabs button{border:0;background:transparent;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:750;color:var(--muted)}.report-tabs button.active{background:var(--green);color:#fff}
+.report-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.month-picker{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px;font-size:12px}
+.report-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:15px}
+.report-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;box-shadow:var(--shadow)}.report-card small{color:var(--muted);font-size:10px}.report-card strong{display:block;font-size:19px;margin-top:6px}
+.report-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:15px}.category-list{display:grid;gap:10px}.cat-row{display:grid;grid-template-columns:1fr auto;gap:10px;font-size:11px}.cat-bar{height:7px;background:#edf1f5;border-radius:99px;overflow:hidden;margin-top:5px}.cat-fill{height:100%;background:#16a37b;border-radius:99px}
+.export-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.export-box{border:1px solid var(--line);border-radius:13px;padding:18px;text-align:center}.export-box .big{font-size:28px;margin-bottom:8px}.export-box strong{display:block;font-size:12px}.export-box p{font-size:10px;color:var(--muted);min-height:28px}
+.user-table .status-active{color:#078b63;background:#e8f8f0;padding:4px 7px;border-radius:99px;font-size:9px;font-weight:800}
+.modal{position:fixed;inset:0;background:rgba(7,19,34,.58);display:flex;align-items:center;justify-content:center;padding:18px;z-index:100}.modal-box{width:min(480px,100%);background:#fff;border-radius:18px;padding:20px;box-shadow:0 25px 80px rgba(0,0,0,.25)}.modal-box h2{margin:0;font-size:18px}.modal-sub{color:var(--muted);font-size:11px;margin-top:4px}.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:11px;font-weight:800}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px;font-size:12px;outline:none}.field textarea{min-height:72px;resize:vertical}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.error{font-size:11px;color:#d92d3a;margin-top:6px}
+.notice{background:#eef8f5;border:1px solid #d5eee6;color:#1d6b59;padding:11px 13px;border-radius:11px;font-size:11px;margin-bottom:15px}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.content-grid,.report-grid,.bottom-grid{grid-template-columns:1fr}.sidebar{width:205px}.main{margin-left:205px;width:calc(100% - 205px)}}
+@media(max-width:760px){.sidebar{width:67px;padding:18px 8px}.brand{padding:8px 5px 20px}.brand-text,.nav-text,.side-user .user-copy{display:none}.nav button{justify-content:center;padding:11px}.side-user{left:8px;right:8px}.main{margin-left:67px;width:calc(100% - 67px);padding:16px}.topbar{align-items:flex-start;flex-direction:column}.top-actions{width:100%}.stats{grid-template-columns:1fr 1fr}.report-stats{grid-template-columns:1fr}.export-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.sidebar{display:none}.main{margin-left:0;width:100%;padding:12px}.stats{grid-template-columns:1fr}.page-title{align-items:flex-start;flex-direction:column}.toolbar>*{width:100%}.search{min-width:0}.report-tabs{width:100%;overflow:auto}.report-tabs button{flex:1;white-space:nowrap}.chartbox{height:235px}}
+</style>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar">
-    <div class="brand">Catatan <span>Kas</span></div>
-    <div class="nav">
-      <button class="active" onclick="scrollToId('dashboard')">📊 Dashboard</button>
-      <button onclick="scrollToId('transactions')">🧾 Transaksi</button>
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark"></div><span class="brand-text">Catatan Kas</span></div>
+  <nav class="nav">
+    <button class="active" data-page="dashboard"><span class="nav-icon">⌂</span><span class="nav-text">Beranda</span></button>
+    <button data-page="transactions"><span class="nav-icon">▤</span><span class="nav-text">Transaksi</span></button>
+    <button data-page="reports"><span class="nav-icon">▥</span><span class="nav-text">Laporan</span></button>
+    <button data-page="export"><span class="nav-icon">⇩</span><span class="nav-text">Export</span></button>
+    <button data-page="users"><span class="nav-icon">♙</span><span class="nav-text">Pengguna</span></button>
+    <button data-page="settings"><span class="nav-icon">⚙</span><span class="nav-text">Pengaturan</span></button>
+  </nav>
+  <div class="side-user"><div class="avatar">A</div><div class="user-copy"><strong id="sideName">Pengunjung</strong><span id="sideRole">Mode baca</span></div></div>
+</aside>
+
+<main class="main">
+<section id="dashboard" class="page active">
+  <div class="topbar">
+    <div class="greeting"><h1>Halo, <span id="helloName">Pengunjung</span> 👋</h1><p>Berikut ringkasan kondisi kas Anda hari ini.</p></div>
+    <div class="top-actions">
+      <div class="status"><i id="statusDot" class="dot"></i><span id="statusText">Mode pengunjung</span></div>
+      <button id="loginBtn" class="btn" onclick="openLogin()">Login Admin</button>
+      <button id="logoutBtn" class="btn hidden" onclick="logout()">Keluar</button>
+      <button id="addBtn" class="btn primary hidden" onclick="openTransaction()">＋ Tambah Transaksi</button>
     </div>
-    <div class="side-bottom">Data tersimpan online di Supabase.<br>Pengunjung hanya dapat melihat data.</div>
-  </aside>
-
-  <main class="main">
-    <section id="dashboard">
-      <div class="top">
-        <div><h1>Catatan Kas</h1><div class="sub">Ringkasan keuangan dan riwayat transaksi</div></div>
-        <div class="actions">
-          <span class="login-state"><i id="dot" class="dot"></i><span id="loginText">Mode pengunjung</span></span>
-          <button id="loginBtn" class="btn" onclick="openLogin()">Login Admin</button>
-          <button id="logoutBtn" class="btn hidden" onclick="logout()">Keluar</button>
-          <button id="addBtn" class="btn primary hidden" onclick="openTransaction()">+ Tambah</button>
-          <button id="exportBtn" class="btn hidden" onclick="exportExcel()">Export Excel</button>
-        </div>
-      </div>
-    
-      <div class="stats">
-        <div class="stat"><div class="label">Saldo</div><div id="balance" class="value">Rp 0</div></div>
-        <div class="stat"><div class="label">Total Pemasukan</div><div id="income" class="value green">Rp 0</div></div>
-        <div class="stat"><div class="label">Total Pengeluaran</div><div id="expense" class="value red">Rp 0</div></div>
-      </div>
-      <div class="grid">
-        <div class="card"><h2>Arus Kas 7 Hari Terakhir</h2><div class="chartbox"><canvas id="cashChart"></canvas></div></div>
-        <div class="card"><h2>Kategori Pengeluaran</h2><div class="chartbox"><canvas id="categoryChart"></canvas></div></div>
-      </div>
-    </section>
-
-    <section id="transactions" class="card">
-      <div class="toolbar">
-        <div><h2 style="margin:0">Riwayat Transaksi</h2><div class="sub" style="font-size:12px">Data terbaru akan muncul otomatis.</div></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="search" class="search" placeholder="Cari transaksi..." oninput="renderTable()"><select id="typeFilter" class="select" onchange="renderTable()"><option value="">Semua</option><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option></select></div>
-      </div>
-      <div class="table-wrap"><table class="table"><thead><tr><th>Tanggal</th><th>Nama</th><th>Jenis</th><th>Kategori</th><th>Nominal</th><th>Keterangan</th><th id="actionHead" class="hidden">Aksi</th></tr></thead><tbody id="tbody"></tbody></table></div>
-    </section>
-  </main>
-</div>
-
-<div id="loginModal" class="modal hidden">
-  <div class="modal-box">
-    <h2>Login Admin</h2><div class="sub">Gunakan email dan password akun Admin Supabase.</div>
-    <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email"></div>
-    <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
-    <div id="loginError" class="error"></div>
-    <div class="modal-actions"><button class="btn" onclick="closeLogin()">Batal</button><button class="btn primary" onclick="login()">Login</button></div>
   </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-top"><span class="stat-label">Saldo Kas</span><span class="stat-icon i-green">▣</span></div><div id="balance" class="stat-value">Rp 0</div><div class="stat-note">Pemasukan dikurangi pengeluaran</div></div>
+    <div class="stat"><div class="stat-top"><span class="stat-label">Total Pemasukan</span><span class="stat-icon i-blue">↗</span></div><div id="income" class="stat-value money-in">Rp 0</div><div class="stat-note">Seluruh pemasukan tercatat</div></div>
+    <div class="stat"><div class="stat-top"><span class="stat-label">Total Pengeluaran</span><span class="stat-icon i-red">↘</span></div><div id="expense" class="stat-value money-out">Rp 0</div><div class="stat-note">Seluruh pengeluaran tercatat</div></div>
+    <div class="stat"><div class="stat-top"><span class="stat-label">Jumlah Transaksi</span><span class="stat-icon i-purple">▤</span></div><div id="countTx" class="stat-value">0</div><div class="stat-note">Data transaksi tersimpan</div></div>
+  </div>
+  <div class="content-grid">
+    <div class="card"><div class="card-head"><h2>Pemasukan vs Pengeluaran</h2><span>7 hari terakhir</span></div><div class="chartbox"><canvas id="cashChart"></canvas></div></div>
+    <div class="card"><div class="card-head"><h2>Pengeluaran per Kategori</h2><span>Semua data</span></div><div class="chartbox"><canvas id="categoryChart"></canvas></div></div>
+  </div>
+  <div class="bottom-grid">
+    <div class="card"><div class="card-head"><h2>Ringkasan per Bulan</h2><span id="summaryYear">Tahun berjalan</span></div><div class="table-wrap"><table class="mini-table"><thead><tr><th>Bulan</th><th>Pemasukan</th><th>Pengeluaran</th><th>Saldo</th></tr></thead><tbody id="monthlySummary"></tbody></table></div></div>
+    <div class="card"><div class="card-head"><h2>Transaksi Terbaru</h2><button class="btn small" onclick="showPage('transactions')">Lihat Semua</button></div><div class="table-wrap"><table class="mini-table"><tbody id="recentTx"></tbody></table></div></div>
+  </div>
+</section>
+
+<section id="transactions" class="page">
+  <div class="page-title"><div><h1>Transaksi</h1><p>Kelola dan cari seluruh catatan kas.</p></div><button id="txAddBtn" class="btn primary hidden" onclick="openTransaction()">＋ Tambah Transaksi</button></div>
+  <div class="toolbar">
+    <input id="search" class="search" placeholder="⌕  Cari transaksi..." oninput="renderTable()">
+    <input id="dateFrom" class="date-input" type="date" onchange="renderTable()">
+    <span style="font-size:11px;color:#9aa5b3">—</span>
+    <input id="dateTo" class="date-input" type="date" onchange="renderTable()">
+    <select id="catFilter" class="select" onchange="renderTable()"><option value="">Semua Kategori</option></select>
+    <select id="typeFilter" class="select" onchange="renderTable()"><option value="">Semua Jenis</option><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option></select>
+  </div>
+  <div class="card table-card"><div class="table-wrap"><table class="table"><thead><tr><th>Tanggal</th><th>Jenis</th><th>Kategori</th><th>Keterangan</th><th>Nominal</th><th id="actionHead">Aksi</th></tr></thead><tbody id="tbody"></tbody></table></div><div id="pagination" class="pagination"></div></div>
+</section>
+
+<section id="reports" class="page">
+  <div class="page-title"><div><h1>Laporan Keuangan</h1><p>Ringkasan keuangan yang tersimpan berdasarkan bulan.</p></div></div>
+  <div class="report-tabs"><button data-period="harian">Harian</button><button data-period="mingguan">Mingguan</button><button class="active" data-period="bulanan">Bulanan</button><button data-period="tahunan">Tahunan</button></div>
+  <div class="report-head"><div><strong id="reportLabel">Laporan Bulanan</strong><div style="font-size:10px;color:var(--muted)">Pilih bulan untuk melihat detail.</div></div><input id="reportMonth" class="month-picker" type="month" onchange="renderReport()"></div>
+  <div class="report-stats"><div class="report-card"><small>Total Pemasukan</small><strong id="reportIncome" class="money-in">Rp 0</strong></div><div class="report-card"><small>Total Pengeluaran</small><strong id="reportExpense" class="money-out">Rp 0</strong></div><div class="report-card"><small>Saldo / Selisih</small><strong id="reportBalance">Rp 0</strong></div></div>
+  <div class="report-grid"><div class="card"><div class="card-head"><h2>Grafik Laporan Bulanan</h2><span id="reportRange">-</span></div><div class="chartbox"><canvas id="reportChart"></canvas></div></div><div class="card"><div class="card-head"><h2>Rincian Pengeluaran</h2><span>per kategori</span></div><div id="reportCategories" class="category-list"></div></div></div>
+</section>
+
+<section id="export" class="page">
+  <div class="page-title"><div><h1>Export Laporan</h1><p>Pilih format dan periode laporan yang ingin disimpan.</p></div></div>
+  <div class="card"><div class="field"><label>Periode</label><select id="exportPeriod"><option value="all">Semua Transaksi</option><option value="month">Bulan yang dipilih</option><option value="year">Tahun yang dipilih</option></select></div><div class="field"><label>Bulan</label><input id="exportMonth" type="month"></div><div class="export-grid"><div class="export-box"><div class="big">▣</div><strong>Excel</strong><p>File .xlsx untuk pengolahan data.</p><button class="btn primary" onclick="exportExcel()">Export Excel</button></div><div class="export-box"><div class="big">▤</div><strong>CSV</strong><p>File .csv untuk aplikasi spreadsheet.</p><button class="btn" onclick="exportCSV()">Export CSV</button></div><div class="export-box"><div class="big">🖨</div><strong>Cetak</strong><p>Cetak laporan langsung dari browser.</p><button class="btn" onclick="window.print()">Cetak</button></div></div></div>
+</section>
+
+<section id="users" class="page">
+  <div class="page-title"><div><h1>Pengguna</h1><p>Informasi akun yang terhubung dengan sistem.</p></div></div>
+  <div class="card"><div class="card-head"><h2>Akun Admin</h2><span>Supabase Authentication</span></div><div class="table-wrap"><table class="table user-table"><thead><tr><th>Nama</th><th>Status</th><th>Peran</th><th>Akun saat ini</th></tr></thead><tbody><tr><td id="userName">Pengunjung</td><td><span class="status-active">Aktif</span></td><td id="userRole">Pengunjung</td><td id="userEmail">-</td></tr></tbody></table></div></div>
+</section>
+
+<section id="settings" class="page">
+  <div class="page-title"><div><h1>Pengaturan</h1><p>Pengaturan tampilan dan informasi aplikasi.</p></div></div>
+  <div class="card"><div class="card-head"><h2>Catatan Kas</h2></div><p style="font-size:12px;color:var(--muted);line-height:1.7;margin:0">Data transaksi tetap disimpan di Supabase. Perubahan desain ini tidak menghapus tabel maupun data transaksi yang sudah ada.</p></div>
+</section>
+</main>
 </div>
 
-<div id="txModal" class="modal hidden">
-  <div class="modal-box">
-    <h2 id="txTitle">Tambah Transaksi</h2>
-    <input type="hidden" id="txId">
-    <div class="field"><label>Tanggal</label><input id="txDate" type="date"></div>
-    <div class="field"><label>Nama</label><input id="txName" placeholder="Contoh: Iuran warga"></div>
-    <div class="field"><label>Jenis</label><select id="txType"><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option></select></div>
-    <div class="field"><label>Kategori</label><input id="txCategory" placeholder="Contoh: Iuran, Operasional"></div>
-    <div class="field"><label>Nominal</label><input id="txAmount" type="number" min="0" placeholder="0"></div>
-    <div class="field"><label>Keterangan</label><textarea id="txNote" placeholder="Keterangan tambahan"></textarea></div>
-    <div id="txError" class="error"></div>
-    <div class="modal-actions"><button class="btn" onclick="closeTransaction()">Batal</button><button class="btn primary" onclick="saveTransaction()">Simpan</button></div>
-  </div>
-</div>
+<div id="loginModal" class="modal hidden"><div class="modal-box"><h2>Login Admin</h2><div class="modal-sub">Gunakan email dan password akun Admin Supabase.</div><div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email"></div><div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password"></div><div id="loginError" class="error"></div><div class="modal-actions"><button class="btn" onclick="closeLogin()">Batal</button><button class="btn primary" onclick="login()">Login</button></div></div></div>
+
+<div id="txModal" class="modal hidden"><div class="modal-box"><h2 id="txTitle">Tambah Transaksi</h2><div class="modal-sub">Simpan pemasukan atau pengeluaran baru.</div><input type="hidden" id="txId"><div class="field"><label>Tanggal</label><input id="txDate" type="date"></div><div class="field"><label>Nama Transaksi</label><input id="txName" placeholder="Contoh: Iuran warga"></div><div class="field"><label>Jenis</label><select id="txType"><option value="masuk">Pemasukan</option><option value="keluar">Pengeluaran</option></select></div><div class="field"><label>Kategori</label><input id="txCategory" placeholder="Contoh: Makanan & Minuman"></div><div class="field"><label>Nominal</label><input id="txAmount" type="number" min="0" placeholder="0"></div><div class="field"><label>Keterangan</label><textarea id="txNote" placeholder="Keterangan tambahan"></textarea></div><div id="txError" class="error"></div><div class="modal-actions"><button class="btn" onclick="closeTransaction()">Batal</button><button class="btn primary" onclick="saveTransaction()">Simpan</button></div></div></div>
 
 <script>
-const SUPABASE_URL = "https://msejzzrqzqdabvqueztw.supabase.co";
-const SUPABASE_KEY = "sb_publishable_58IT-G66onKVVPsSfzTllQ_lYPeD0iU";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let transactions = [], isAdmin = false, cashChart, categoryChart;
+const SUPABASE_URL="https://msejzzrqzqdabvqueztw.supabase.co";
+const SUPABASE_KEY="sb_publishable_58IT-G66onKVVPsSfzTllQ_lYPeD0iU";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let transactions=[],isAdmin=false,cashChart=null,categoryChart=null,reportChart=null,currentPage=1;
+const PAGE_SIZE=8;
+const rupiah=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const monthName=m=>new Intl.DateTimeFormat("id-ID",{month:"long",year:"numeric"}).format(new Date(m+"-01T00:00:00"));
 
-const rupiah = n => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(n)||0);
-const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  if(id==="reports")renderReport();
+  if(id==="transactions")renderTable();
+}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.querySelectorAll(".report-tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".report-tabs button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderReport();}));
 
 async function init(){
-  await refreshSession();
-  await loadTransactions();
-  sb.auth.onAuthStateChange(async()=>{ setTimeout(async()=>{await refreshSession(); await loadTransactions()},0); });
+  const now=new Date();
+  document.getElementById("reportMonth").value=now.toISOString().slice(0,7);
+  document.getElementById("exportMonth").value=now.toISOString().slice(0,7);
+  await refreshSession(); await loadTransactions();
+  sb.auth.onAuthStateChange(()=>setTimeout(async()=>{await refreshSession();await loadTransactions()},0));
 }
 async function refreshSession(){
   const {data:{session}}=await sb.auth.getSession();
   isAdmin=false;
   if(session){
-    const {data:profile}=await sb.from('profiles').select('role').eq('id',session.user.id).maybeSingle();
-    isAdmin=profile?.role==='admin';
+    const {data:profile}=await sb.from("profiles").select("role,nama").eq("id",session.user.id).maybeSingle();
+    isAdmin=profile?.role==="admin";
+    document.getElementById("userName").textContent=profile?.nama||"Admin";
+    document.getElementById("userRole").textContent=isAdmin?"Admin":"Pengguna";
+    document.getElementById("userEmail").textContent=session.user.email||"-";
+    document.getElementById("helloName").textContent=profile?.nama||"Admin";
+    document.getElementById("sideName").textContent=profile?.nama||"Admin";
+    document.getElementById("sideRole").textContent=isAdmin?"Administrator":"Pengguna";
+  }else{
+    document.getElementById("userName").textContent="Pengunjung";document.getElementById("userRole").textContent="Pengunjung";document.getElementById("userEmail").textContent="-";
+    document.getElementById("helloName").textContent="Pengunjung";document.getElementById("sideName").textContent="Pengunjung";document.getElementById("sideRole").textContent="Mode baca";
   }
-  document.getElementById('loginBtn').classList.toggle('hidden',isAdmin);
-  document.getElementById('logoutBtn').classList.toggle('hidden',!isAdmin);
-  document.getElementById('addBtn').classList.toggle('hidden',!isAdmin);
-  document.getElementById('exportBtn').classList.toggle('hidden',!isAdmin);
-  document.getElementById('actionHead').classList.toggle('hidden',!isAdmin);
-  document.getElementById('dot').classList.toggle('on',isAdmin);
-  document.getElementById('loginText').textContent=isAdmin?'Admin aktif':'Mode pengunjung';
+  document.getElementById("loginBtn").classList.toggle("hidden",isAdmin);
+  document.getElementById("logoutBtn").classList.toggle("hidden",!isAdmin);
+  document.getElementById("addBtn").classList.toggle("hidden",!isAdmin);
+  document.getElementById("txAddBtn").classList.toggle("hidden",!isAdmin);
+  document.getElementById("actionHead").classList.toggle("hidden",!isAdmin);
+  document.getElementById("statusDot").classList.toggle("on",isAdmin);
+  document.getElementById("statusText").textContent=isAdmin?"Admin aktif":"Mode pengunjung";
   renderTable();
 }
 async function loadTransactions(){
-  const {data,error}=await sb.from('transaksi').select('*').order('tanggal',{ascending:false}).order('created_at',{ascending:false});
-  if(error){console.error(error); document.getElementById('tbody').innerHTML='<tr><td colspan="7" class="empty">Gagal mengambil data. Periksa konfigurasi Supabase.</td></tr>';return;}
-  transactions=data||[]; updateSummary(); renderTable(); renderCharts();
+  const {data,error}=await sb.from("transaksi").select("*").order("tanggal",{ascending:false}).order("created_at",{ascending:false});
+  if(error){console.error(error);document.getElementById("tbody").innerHTML='<tr><td colspan="6" class="empty">Gagal mengambil data. Periksa koneksi Supabase.</td></tr>';return}
+  transactions=data||[];populateCategories();updateSummary();renderTable();renderCharts();renderMonthlySummary();renderRecent();renderReport();
 }
 function updateSummary(){
-  const income=transactions.filter(x=>x.jenis==='masuk').reduce((a,x)=>a+Number(x.nominal||0),0);
-  const expense=transactions.filter(x=>x.jenis==='keluar').reduce((a,x)=>a+Number(x.nominal||0),0);
-  document.getElementById('income').textContent=rupiah(income);
-  document.getElementById('expense').textContent=rupiah(expense);
-  document.getElementById('balance').textContent=rupiah(income-expense);
+  const income=transactions.filter(x=>x.jenis==="masuk").reduce((a,x)=>a+Number(x.nominal||0),0);
+  const expense=transactions.filter(x=>x.jenis==="keluar").reduce((a,x)=>a+Number(x.nominal||0),0);
+  document.getElementById("income").textContent=rupiah(income);document.getElementById("expense").textContent=rupiah(expense);document.getElementById("balance").textContent=rupiah(income-expense);document.getElementById("countTx").textContent=transactions.length;
+}
+function populateCategories(){
+  const sel=document.getElementById("catFilter"),old=sel.value;
+  const cats=[...new Set(transactions.map(x=>x.kategori).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Semua Kategori</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  sel.value=old;
+}
+function filteredTransactions(){
+  const q=(document.getElementById("search").value||"").toLowerCase(),type=document.getElementById("typeFilter").value,cat=document.getElementById("catFilter").value,from=document.getElementById("dateFrom").value,to=document.getElementById("dateTo").value;
+  return transactions.filter(x=>(!type||x.jenis===type)&&(!cat||x.kategori===cat)&&(!from||x.tanggal>=from)&&(!to||x.tanggal<=to)&&(!q||[x.nama,x.kategori,x.keterangan,x.tanggal].some(v=>String(v??"").toLowerCase().includes(q))));
 }
 function renderTable(){
-  const q=(document.getElementById('search').value||'').toLowerCase(), type=document.getElementById('typeFilter').value;
-  const rows=transactions.filter(x=>(!type||x.jenis===type)&&(!q||[x.nama,x.kategori,x.keterangan,x.tanggal].some(v=>String(v??'').toLowerCase().includes(q))));
-  document.getElementById('tbody').innerHTML=rows.length?rows.map(x=>`<tr>
-    <td>${esc(x.tanggal)}</td><td>${esc(x.nama)}</td>
-    <td><span class="badge ${x.jenis==='masuk'?'in':'out'}">${x.jenis==='masuk'?'Pemasukan':'Pengeluaran'}</span></td>
-    <td>${esc(x.kategori)}</td><td>${rupiah(x.nominal)}</td><td>${esc(x.keterangan)}</td>
-    ${isAdmin?`<td><button class="btn small" onclick="openTransaction(${x.id})">Edit</button> <button class="btn small danger" onclick="deleteTransaction(${x.id})">Hapus</button></td>`:''}
-  </tr>`).join(''):`<tr><td colspan="${isAdmin?7:6}" class="empty">Belum ada transaksi.</td></tr>`;
+  const rows=filteredTransactions(),pages=Math.max(1,Math.ceil(rows.length/PAGE_SIZE));currentPage=Math.min(currentPage,pages);
+  const start=(currentPage-1)*PAGE_SIZE,view=rows.slice(start,start+PAGE_SIZE);
+  document.getElementById("tbody").innerHTML=view.length?view.map(x=>`<tr><td>${esc(x.tanggal)}</td><td><span class="badge ${x.jenis==="masuk"?"in":"out"}">${x.jenis==="masuk"?"Pemasukan":"Pengeluaran"}</span></td><td>${esc(x.kategori||"Lainnya")}</td><td>${esc(x.keterangan||x.nama||"-")}</td><td class="${x.jenis==="masuk"?"money-in":"money-out"}">${rupiah(x.nominal)}</td><td>${isAdmin?`<button class="btn small" onclick="openTransaction(${x.id})">Edit</button> <button class="btn small danger" onclick="deleteTransaction(${x.id})">Hapus</button>`:"-"}</td></tr>`).join(""):`<tr><td colspan="6" class="empty">Belum ada transaksi yang sesuai.</td></tr>`;
+  let pg="";for(let i=1;i<=pages;i++)pg+=`<button class="${i===currentPage?"active":""}" onclick="currentPage=${i};renderTable()">${i}</button>`;document.getElementById("pagination").innerHTML=pg;
 }
 function renderCharts(){
-  const labels=[], valsIn=[], valsOut=[]; const now=new Date();
-  for(let i=6;i>=0;i--){let d=new Date(now);d.setDate(now.getDate()-i);let s=d.toISOString().slice(0,10);labels.push(s.slice(5));valsIn.push(transactions.filter(x=>x.tanggal===s&&x.jenis==='masuk').reduce((a,x)=>a+Number(x.nominal||0),0));valsOut.push(transactions.filter(x=>x.tanggal===s&&x.jenis==='keluar').reduce((a,x)=>a+Number(x.nominal||0),0));}
-  const cats={}; transactions.filter(x=>x.jenis==='keluar').forEach(x=>cats[x.kategori||'Lainnya']=(cats[x.kategori||'Lainnya']||0)+Number(x.nominal||0));
-  if(cashChart)cashChart.destroy(); if(categoryChart)categoryChart.destroy();
-  cashChart=new Chart(document.getElementById('cashChart'),{type:'line',data:{labels,datasets:[{label:'Pemasukan',data:valsIn,tension:.35},{label:'Pengeluaran',data:valsOut,tension:.35}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:v=>'Rp '+Number(v).toLocaleString('id-ID')}}}}});
-  categoryChart=new Chart(document.getElementById('categoryChart'),{type:'doughnut',data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats)}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+  const labels=[],ins=[],outs=[],now=new Date();
+  for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(now.getDate()-i);const s=d.toISOString().slice(0,10);labels.push(d.toLocaleDateString("id-ID",{day:"2-digit",month:"short"}));ins.push(transactions.filter(x=>x.tanggal===s&&x.jenis==="masuk").reduce((a,x)=>a+Number(x.nominal||0),0));outs.push(transactions.filter(x=>x.tanggal===s&&x.jenis==="keluar").reduce((a,x)=>a+Number(x.nominal||0),0))}
+  const cats={};transactions.filter(x=>x.jenis==="keluar").forEach(x=>cats[x.kategori||"Lainnya"]=(cats[x.kategori||"Lainnya"]||0)+Number(x.nominal||0));
+  if(cashChart)cashChart.destroy();if(categoryChart)categoryChart.destroy();
+  cashChart=new Chart(document.getElementById("cashChart"),{type:"line",data:{labels,datasets:[{label:"Pemasukan",data:ins,borderColor:"#12a77c",backgroundColor:"rgba(18,167,124,.08)",fill:true,tension:.35},{label:"Pengeluaran",data:outs,borderColor:"#ef5b68",backgroundColor:"rgba(239,91,104,.06)",fill:true,tension:.35}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top",labels:{boxWidth:9,font:{size:10}}}},scales:{y:{ticks:{font:{size:9},callback:v=>"Rp "+Number(v).toLocaleString("id-ID")},grid:{color:"#edf1f5"}},x:{ticks:{font:{size:9}},grid:{display:false}}}}});
+  categoryChart=new Chart(document.getElementById("categoryChart"),{type:"doughnut",data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats),backgroundColor:["#16a37b","#3b82f6","#f59e0b","#8b5cf6","#ef5b68","#06b6d4","#64748b"]}]},options:{responsive:true,maintainAspectRatio:false,cutout:"64%",plugins:{legend:{position:"bottom",labels:{boxWidth:9,font:{size:9}}}}}});
 }
-function openLogin(){document.getElementById('loginError').textContent='';document.getElementById('loginModal').classList.remove('hidden');document.getElementById('loginEmail').focus()}
-function closeLogin(){document.getElementById('loginModal').classList.add('hidden')}
+function monthData(month){
+  const rows=transactions.filter(x=>x.tanggal?.startsWith(month));
+  const income=rows.filter(x=>x.jenis==="masuk").reduce((a,x)=>a+Number(x.nominal||0),0),expense=rows.filter(x=>x.jenis==="keluar").reduce((a,x)=>a+Number(x.nominal||0),0);
+  return {rows,income,expense,balance:income-expense};
+}
+function renderMonthlySummary(){
+  const year=new Date().getFullYear();document.getElementById("summaryYear").textContent=year;
+  let out="";for(let m=12;m>=1;m--){const mm=String(m).padStart(2,"0"),d=monthData(`${year}-${mm}`);if(d.rows.length)out+=`<tr><td>${new Date(`${year}-${mm}-01`).toLocaleDateString("id-ID",{month:"long"})}</td><td class="money-in">${rupiah(d.income)}</td><td class="money-out">${rupiah(d.expense)}</td><td>${rupiah(d.balance)}</td></tr>`}
+  document.getElementById("monthlySummary").innerHTML=out||'<tr><td colspan="4" class="empty">Belum ada data tahun ini.</td></tr>';
+}
+function renderRecent(){
+  const rows=transactions.slice(0,5);document.getElementById("recentTx").innerHTML=rows.length?rows.map(x=>`<tr><td><strong>${esc(x.nama||x.kategori||"Transaksi")}</strong><br><span style="font-size:9px;color:#9aa5b3">${esc(x.tanggal)} · ${x.jenis==="masuk"?"Pemasukan":"Pengeluaran"}</span></td><td class="${x.jenis==="masuk"?"money-in":"money-out"}">${rupiah(x.nominal)}</td></tr>`).join(""):'<tr><td class="empty">Belum ada transaksi.</td></tr>';
+}
+function renderReport(){
+  const month=document.getElementById("reportMonth").value||new Date().toISOString().slice(0,7),d=monthData(month);
+  document.getElementById("reportLabel").textContent=`Laporan Bulanan — ${monthName(month)}`;document.getElementById("reportRange").textContent=monthName(month);
+  document.getElementById("reportIncome").textContent=rupiah(d.income);document.getElementById("reportExpense").textContent=rupiah(d.expense);document.getElementById("reportBalance").textContent=rupiah(d.balance);
+  const cats={};d.rows.filter(x=>x.jenis==="keluar").forEach(x=>cats[x.kategori||"Lainnya"]=(cats[x.kategori||"Lainnya"]||0)+Number(x.nominal||0));const total=d.expense||1;
+  document.getElementById("reportCategories").innerHTML=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="cat-row"><div><strong>${esc(k)}</strong><div class="cat-bar"><div class="cat-fill" style="width:${Math.min(100,v/total*100)}%"></div></div></div><strong>${rupiah(v)}</strong></div>`).join("")||'<div class="empty">Belum ada pengeluaran pada bulan ini.</div>';
+  const days=new Date(Number(month.slice(0,4)),Number(month.slice(5,7)),0).getDate(),labels=[],ins=[],outs=[];
+  for(let i=1;i<=days;i++){const s=`${month}-${String(i).padStart(2,"0")}`;labels.push(i);ins.push(d.rows.filter(x=>x.tanggal===s&&x.jenis==="masuk").reduce((a,x)=>a+Number(x.nominal||0),0));outs.push(d.rows.filter(x=>x.tanggal===s&&x.jenis==="keluar").reduce((a,x)=>a+Number(x.nominal||0),0))}
+  if(reportChart)reportChart.destroy();reportChart=new Chart(document.getElementById("reportChart"),{type:"bar",data:{labels,datasets:[{label:"Pemasukan",data:ins,backgroundColor:"#16a37b"},{label:"Pengeluaran",data:outs,backgroundColor:"#ef5b68"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top",labels:{boxWidth:9,font:{size:10}}}},scales:{x:{grid:{display:false},ticks:{font:{size:8}}},y:{ticks:{font:{size:9},callback:v=>"Rp "+Number(v).toLocaleString("id-ID")},grid:{color:"#edf1f5"}}}}});
+}
 async function login(){
-  const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;
-  const {error}=await sb.auth.signInWithPassword({email,password});
-  if(error){document.getElementById('loginError').textContent=error.message;return}
-  closeLogin(); await refreshSession(); await loadTransactions();
+  const email=document.getElementById("loginEmail").value.trim(),password=document.getElementById("loginPassword").value;const {error}=await sb.auth.signInWithPassword({email,password});
+  if(error){document.getElementById("loginError").textContent=error.message;return}closeLogin();await refreshSession();await loadTransactions();
 }
-async function logout(){await sb.auth.signOut();await refreshSession();await loadTransactions()}
+async function logout(){await sb.auth.signOut();await refreshSession();await loadTransactions();showPage("dashboard")}
+function openLogin(){document.getElementById("loginError").textContent="";document.getElementById("loginModal").classList.remove("hidden");document.getElementById("loginEmail").focus()}
+function closeLogin(){document.getElementById("loginModal").classList.add("hidden")}
 function openTransaction(id=null){
-  document.getElementById('txError').textContent='';document.getElementById('txId').value=id||'';
-  if(id){const x=transactions.find(t=>t.id===id);document.getElementById('txTitle').textContent='Edit Transaksi';document.getElementById('txDate').value=x.tanggal;document.getElementById('txName').value=x.nama;document.getElementById('txType').value=x.jenis;document.getElementById('txCategory').value=x.kategori||'';document.getElementById('txAmount').value=x.nominal;document.getElementById('txNote').value=x.keterangan||''}
-  else {document.getElementById('txTitle').textContent='Tambah Transaksi';document.getElementById('txDate').value=new Date().toISOString().slice(0,10);['txName','txCategory','txAmount','txNote'].forEach(id=>document.getElementById(id).value='');document.getElementById('txType').value='masuk'}
-  document.getElementById('txModal').classList.remove('hidden');
+  if(!isAdmin)return;document.getElementById("txError").textContent="";document.getElementById("txId").value=id||"";
+  if(id){const x=transactions.find(t=>t.id===id);document.getElementById("txTitle").textContent="Edit Transaksi";document.getElementById("txDate").value=x.tanggal;document.getElementById("txName").value=x.nama||"";document.getElementById("txType").value=x.jenis;document.getElementById("txCategory").value=x.kategori||"";document.getElementById("txAmount").value=x.nominal;document.getElementById("txNote").value=x.keterangan||""}
+  else{document.getElementById("txTitle").textContent="Tambah Transaksi";document.getElementById("txDate").value=new Date().toISOString().slice(0,10);["txName","txCategory","txAmount","txNote"].forEach(i=>document.getElementById(i).value="");document.getElementById("txType").value="masuk"}
+  document.getElementById("txModal").classList.remove("hidden");
 }
-function closeTransaction(){document.getElementById('txModal').classList.add('hidden')}
+function closeTransaction(){document.getElementById("txModal").classList.add("hidden")}
 async function saveTransaction(){
-  if(!isAdmin)return;
-  const id=document.getElementById('txId').value;
-  const row={tanggal:document.getElementById('txDate').value,nama:document.getElementById('txName').value.trim(),jenis:document.getElementById('txType').value,kategori:document.getElementById('txCategory').value.trim(),nominal:Number(document.getElementById('txAmount').value),keterangan:document.getElementById('txNote').value.trim()};
-  if(!row.tanggal||!row.nama||!row.nominal){document.getElementById('txError').textContent='Tanggal, nama, dan nominal wajib diisi.';return}
-  let res=id?await sb.from('transaksi').update(row).eq('id',id):await sb.from('transaksi').insert(row);
-  if(res.error){document.getElementById('txError').textContent=res.error.message;return}
-  closeTransaction();await loadTransactions();
+  if(!isAdmin)return;const id=document.getElementById("txId").value,row={tanggal:document.getElementById("txDate").value,nama:document.getElementById("txName").value.trim(),jenis:document.getElementById("txType").value,kategori:document.getElementById("txCategory").value.trim(),nominal:Number(document.getElementById("txAmount").value),keterangan:document.getElementById("txNote").value.trim()};
+  if(!row.tanggal||!row.nama||!row.nominal){document.getElementById("txError").textContent="Tanggal, nama transaksi, dan nominal wajib diisi.";return}
+  const res=id?await sb.from("transaksi").update(row).eq("id",id):await sb.from("transaksi").insert(row);
+  if(res.error){document.getElementById("txError").textContent=res.error.message;return}closeTransaction();await loadTransactions();
 }
-async function deleteTransaction(id){
-  if(!isAdmin||!confirm('Hapus transaksi ini?'))return;
-  const {error}=await sb.from('transaksi').delete().eq('id',id);if(error)alert(error.message);else await loadTransactions();
+async function deleteTransaction(id){if(!isAdmin||!confirm("Hapus transaksi ini?"))return;const {error}=await sb.from("transaksi").delete().eq("id",id);if(error)alert(error.message);else await loadTransactions()}
+function exportRows(){
+  const period=document.getElementById("exportPeriod").value,month=document.getElementById("exportMonth").value;
+  if(period==="month"&&month)return transactions.filter(x=>x.tanggal?.startsWith(month));
+  if(period==="year"&&month)return transactions.filter(x=>x.tanggal?.startsWith(month.slice(0,4)));
+  return transactions;
 }
-function exportExcel(){
-  if(!isAdmin)return;
-  const data=transactions.map(x=>({Tanggal:x.tanggal,Nama:x.nama,Jenis:x.jenis==='masuk'?'Pemasukan':'Pengeluaran',Kategori:x.kategori,Nominal:Number(x.nominal),Keterangan:x.keterangan}));
-  const ws=XLSX.utils.json_to_sheet(data),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Catatan Kas');XLSX.writeFile(wb,'catatan-kas.xlsx');
-}
-function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+function exportExcel(){if(!isAdmin){alert("Silakan login sebagai Admin.");return}const rows=exportRows().map(x=>({Tanggal:x.tanggal,Jenis:x.jenis==="masuk"?"Pemasukan":"Pengeluaran",Kategori:x.kategori,Nama:x.nama,Nominal:Number(x.nominal),Keterangan:x.keterangan}));const ws=XLSX.utils.json_to_sheet(rows),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Catatan Kas");XLSX.writeFile(wb,"laporan-catatan-kas.xlsx")}
+function exportCSV(){if(!isAdmin){alert("Silakan login sebagai Admin.");return}const rows=exportRows(),head=["Tanggal","Jenis","Kategori","Nama","Nominal","Keterangan"],csv=[head,...rows.map(x=>[x.tanggal,x.jenis==="masuk"?"Pemasukan":"Pengeluaran",x.kategori,x.nama,x.nominal,x.keterangan])].map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));a.download="laporan-catatan-kas.csv";a.click();URL.revokeObjectURL(a.href)}
 init();
 </script>
 </body>
