@@ -317,7 +317,493 @@ textarea:focus{
   }
 
 }
+}
+  /* =========================================================
+   CATATAN KAS — REDESIGN MODERN FINANCE APP
+   ========================================================= */
 
+:root{
+  --app-blue:#0878f9;
+  --app-blue-dark:#0759c9;
+  --app-blue-soft:#eaf4ff;
+  --app-bg:#f5f9ff;
+  --app-card:#ffffff;
+  --app-text:#102a56;
+  --app-muted:#7890b2;
+  --app-green:#16b98a;
+  --app-red:#ff5260;
+  --app-orange:#ff9f1c;
+  --app-purple:#8b5cf6;
+  --app-radius:22px;
+}
+
+/* Background utama */
+body{
+  background:#f5f9ff !important;
+  color:var(--app-text) !important;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+}
+
+/* Area aplikasi */
+.app{
+  background:var(--app-bg) !important;
+  min-height:100vh;
+}
+
+/* =========================================================
+   SIDEBAR DESKTOP
+   ========================================================= */
+
+.sidebar{
+  background:linear-gradient(180deg,#0878f9 0%,#075dcc 100%) !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+.brand{
+  color:#fff !important;
+}
+
+.brand-text{
+  color:#fff !important;
+  font-weight:800 !important;
+}
+
+.brand-mark{
+  background:#12b98a !important;
+  border-radius:14px !important;
+}
+
+.nav button{
+  border-radius:15px !important;
+  margin:5px 10px !important;
+  color:rgba(255,255,255,.85) !important;
+}
+
+.nav button.active{
+  background:#fff !important;
+  color:var(--app-blue) !important;
+  box-shadow:0 8px 25px rgba(0,0,0,.08) !important;
+}
+
+.nav button:hover{
+  background:rgba(255,255,255,.14) !important;
+}
+
+.side-user{
+  border-top:1px solid rgba(255,255,255,.15) !important;
+  color:#fff !important;
+}
+
+/* =========================================================
+   AREA UTAMA
+   ========================================================= */
+
+.main{
+  background:var(--app-bg) !important;
+}
+
+.topbar{
+  padding:28px 34px 12px !important;
+}
+
+.page-title{
+  color:var(--app-text) !important;
+}
+
+.page-title h1{
+  font-size:30px !important;
+  font-weight:800 !important;
+  letter-spacing:-.6px !important;
+}
+
+.page-title p{
+  color:var(--app-muted) !important;
+}
+
+/* =========================================================
+   KARTU
+   ========================================================= */
+
+.card,
+.stat,
+.report-card,
+.content-card,
+.panel,
+.summary-card{
+  background:#fff !important;
+  border:1px solid #e7eff9 !important;
+  border-radius:var(--app-radius) !important;
+  box-shadow:0 8px 28px rgba(30,83,145,.07) !important;
+}
+
+/* =========================================================
+   STAT / SALDO
+   ========================================================= */
+
+.stats{
+  gap:18px !important;
+}
+
+.stat{
+  padding:24px !important;
+  min-height:145px;
+}
+
+.stat:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 35px rgba(30,83,145,.10) !important;
+  transition:.2s ease;
+}
+
+.stat-label{
+  color:#6e84a5 !important;
+  font-weight:600 !important;
+}
+
+.stat-value{
+  color:var(--app-text) !important;
+  font-size:27px !important;
+  font-weight:850 !important;
+  letter-spacing:-.5px;
+}
+
+.stat small,
+.stat-sub{
+  color:#8296b2 !important;
+}
+
+/* =========================================================
+   TOMBOL
+   ========================================================= */
+
+button,
+.btn{
+  border-radius:14px !important;
+}
+
+.btn-primary,
+.primary,
+button.primary{
+  background:linear-gradient(135deg,#0878f9,#0668df) !important;
+  border:0 !important;
+  color:#fff !important;
+  box-shadow:0 8px 20px rgba(8,120,249,.20) !important;
+}
+
+.btn-primary:hover,
+.primary:hover{
+  transform:translateY(-1px);
+}
+
+/* =========================================================
+   GRAFIK
+   ========================================================= */
+
+.content-grid,
+.report-grid,
+.bottom-grid{
+  gap:18px !important;
+}
+
+.chart-card,
+.chart-container{
+  background:#fff !important;
+  border-radius:var(--app-radius) !important;
+}
+
+/* =========================================================
+   TRANSAKSI
+   ========================================================= */
+
+.transaction-list,
+.transactions{
+  gap:10px !important;
+}
+
+.transaction-item,
+.tx-row{
+  background:#fff !important;
+  border:1px solid #edf2f8 !important;
+  border-radius:16px !important;
+  padding:15px !important;
+  transition:.2s ease;
+}
+
+.transaction-item:hover,
+.tx-row:hover{
+  background:#f9fbff !important;
+  transform:translateX(2px);
+}
+
+.income,
+.text-income{
+  color:var(--app-green) !important;
+}
+
+.expense,
+.text-expense{
+  color:var(--app-red) !important;
+}
+
+/* =========================================================
+   BADGE / ICON
+   ========================================================= */
+
+.icon,
+.nav-icon,
+.category-icon{
+  border-radius:14px !important;
+}
+
+.badge{
+  border-radius:999px !important;
+}
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+input,
+select,
+textarea{
+  background:#f8fbff !important;
+  border:1px solid #dce8f7 !important;
+  border-radius:14px !important;
+  color:var(--app-text) !important;
+  min-height:45px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--app-blue) !important;
+  box-shadow:0 0 0 4px rgba(8,120,249,.09) !important;
+  outline:none !important;
+}
+
+/* =========================================================
+   LAPORAN
+   ========================================================= */
+
+.report-card{
+  padding:20px !important;
+}
+
+.report-card h3,
+.report-card h4{
+  color:var(--app-text) !important;
+}
+
+.report-card .amount{
+  font-weight:800 !important;
+}
+
+/* =========================================================
+   MOBILE — GAYA SEPERTI REFERENSI
+   ========================================================= */
+
+@media(max-width:760px){
+
+  body{
+    background:#f5f9ff !important;
+  }
+
+  .app{
+    min-height:100vh;
+    padding-bottom:78px;
+  }
+
+  /* sembunyikan sidebar */
+  .sidebar{
+    display:none !important;
+  }
+
+  .main{
+    margin-left:0 !important;
+    width:100% !important;
+    padding:0 15px 25px !important;
+  }
+
+  .topbar{
+    padding:18px 4px 8px !important;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .page-title h1{
+    font-size:25px !important;
+    margin-bottom:4px;
+  }
+
+  .page-title p{
+    font-size:13px !important;
+  }
+
+  /* kartu statistik menjadi kartu horizontal */
+  .stats{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .stat{
+    min-height:115px !important;
+    padding:17px !important;
+    border-radius:20px !important;
+  }
+
+  .stat:first-child{
+    grid-column:1 / -1;
+    background:linear-gradient(135deg,#0878f9,#126de0) !important;
+    color:#fff !important;
+    min-height:165px !important;
+  }
+
+  .stat:first-child .stat-label,
+  .stat:first-child .stat-value,
+  .stat:first-child small,
+  .stat:first-child .stat-sub{
+    color:#fff !important;
+  }
+
+  .stat-value{
+    font-size:21px !important;
+  }
+
+  .stat:first-child .stat-value{
+    font-size:30px !important;
+    margin-top:15px;
+  }
+
+  /* grid menjadi satu kolom */
+  .content-grid,
+  .report-grid,
+  .bottom-grid{
+    grid-template-columns:1fr !important;
+    gap:14px !important;
+  }
+
+  .chart-card,
+  .report-card,
+  .card{
+    border-radius:20px !important;
+  }
+
+  /* tombol / toolbar */
+  .toolbar,
+  .top-actions{
+    width:100% !important;
+    gap:8px !important;
+  }
+
+  .toolbar > *,
+  .top-actions > *{
+    max-width:100% !important;
+  }
+
+  /* navigasi bawah */
+  .mobile-nav{
+    display:flex !important;
+  }
+
+  /* jika class nav utama masih tampil */
+  .nav{
+    display:none !important;
+  }
+
+}
+
+/* =========================================================
+   NAVIGASI BAWAH
+   ========================================================= */
+
+.mobile-nav{
+  display:none;
+}
+
+@media(max-width:760px){
+
+  .mobile-nav{
+    position:fixed;
+    z-index:9999;
+    left:10px;
+    right:10px;
+    bottom:10px;
+
+    height:66px;
+
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(15px);
+
+    border:1px solid #e5edf7;
+    border-radius:22px;
+
+    box-shadow:0 12px 35px rgba(28,72,125,.16);
+
+    align-items:center;
+    justify-content:space-around;
+    padding:5px;
+  }
+
+  .mobile-nav button{
+    flex:1;
+    height:56px;
+
+    background:transparent;
+    border:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:3px;
+
+    color:#8194af;
+    font-size:10px;
+    font-weight:600;
+  }
+
+  .mobile-nav button.active{
+    color:var(--app-blue);
+  }
+
+  .mobile-nav button span:first-child{
+    font-size:20px;
+  }
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal{
+  backdrop-filter:blur(5px);
+}
+
+.modal > div{
+  border-radius:24px !important;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar{
+  width:7px;
+}
+
+::-webkit-scrollbar-track{
+  background:#f5f9ff;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#cbd9ec;
+  border-radius:99px;
+}
 </style>
 </head>
 <body>
